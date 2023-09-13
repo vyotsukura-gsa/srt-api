@@ -37,7 +37,7 @@ The definitive list can be found by reading config.js.
 ## Installation 
 * Navigate to the bin folder that was created through the clone. 
 * Type `./dev_setup.sh` to begin installation. 
-* Note - If this script fails during execution, please refer to the manual setup guide for installing the necessary tools and packages here: [srt-api - documentation](https://github.com/GSA/srt-api/tree/main/documentation).  
+* Note - If this script fails during execution, please refer to the manual setup guide for installing the necessary tools and packages here: [srt-api - documentation](https://github.com/vyotsukura-gsa/srt-api/tree/master/documentation).  
 * This script will install and set up much of what you need for this project: 
     * Node Package Manager (npm) 
     * Postgres 
@@ -53,4 +53,4 @@ Database connection information is stored in the dbConfig.js file but will be ov
 ## Deployment 
 [Need text that describes the current deployment process here]
 # More Info  
-For more detailed information, please refer to the documentation here: [Documentation](https://github.com/GSA/srt-api/tree/main/documentation) 
+For more detailed information, please refer to the documentation here: [Documentation](https://github.com/vyotsukura-gsa/srt-api/tree/master/documentation) 
