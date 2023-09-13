@@ -18,10 +18,14 @@ sudo npm install npm@latest -g
 
 ## Install Postgres 
 Mac: 
-`brew install postgresql`
+```
+brew install postgresql
+```
 
 Ubuntu: 
-`sudo apt install postgresql-client libpq-dev postgresql-server-dev pgadmin`
+```
+sudo apt install postgresql-client libpq-dev postgresql-server-dev pgadmin
+```
 
 ## Install Node Version Manager (nvm)
 Mac: 
@@ -73,9 +77,13 @@ source ~/.bashrc
 
 ## Start Postgres 
 Mac: 
-`pg_ctl start`
+```
+pg_ctl start
+```
 Ubuntu: 
-`sudo systemctl start postgresql.service`
+```
+sudo systemctl start postgresql.service
+```
 ## Final Steps 
 For both Mac and Ubuntu: 
 ### Create Postgres user 
@@ -92,9 +100,13 @@ sudo -u postgres psql -c "ALTER USER $USER WITH Superuser;"
 sudo -u postgres psql -c "ALTER USER $USER WITH CREATEDB;"
 ```
 ### Create the SRT database 
-`sudo -u postgres createdb srt -O circleci`
+```
+sudo -u postgres createdb srt -O circleci
+```
 ### Create tables 
-`psql -d srt -f ../db/init/tables.sql`
+```
+psql -d srt -f ../db/init/tables.sql
+```
 ### Install Node Version 16 
 ```
 nvm install 16
@@ -115,4 +127,6 @@ cd ..
 npm install
 ```
 ### Start the Server 
-`npm run dev`
+```
+npm run dev
+```
