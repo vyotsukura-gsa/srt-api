@@ -1,138 +1,56 @@
-# Manual Setup Guide 
-Use the following guide to install required modules when the automated setup script fails or is not available. 
+# Overview 
+The SRT API is an Express.js Node application that provides a RESTful API for the SRT client. The SRT client and API together deliver the web portal called the [Solicitation Review Tool](https://srt.app.cloud.gov/auth) for viewing Section 508 compliance predictions for solicitations submitted from agencies around the federal government while also allowing its users to provide feedback to SRT. 
 
-## Install Docker 
-Install the Docker engine for various platforms by referring to the documentation here: [https://docs.docker.com/engine/install/]
+The SRT API runs in a Docker container and accesses solicitations data that is scraped daily from SAM.GOV and stored in a Postgres database housed on cloud.gov. To facilitate development, testing and deployment of this application, this API runs in 3 different instances on cloud.gov - production, staging and development. 
 
-## Install Node Package Manager (npm)
-Mac: 
-```
-brew install npm
-```
+A developer on this project will work in a command line environment in any one of several operating systems and use an IDE such as Visual Studio Code. A brief setup guide is outlined below. A developer will also need account access to various environments in order to work on this project: Cloud.gov, SAM.gov, etc. See details below. 
 
-Ubuntu: 
-```
-sudo apt-get install -y nodejs npm
-sudo npm install npm@latest -g
-```
+Node Package Manager (npm) and yarn are used to install and update Node modules for this project and the security of each of these Node modules is maintained through SNYK. 
+# Developer Requirements 
+## Software Components and Tools 
+The following is a summary of the software and tools that are needed for development of this project: 
+* Operating system - Linux, Ubuntu, Mac OS, Windows 
+* IDE - Visual Studio Code, etc. 
+* Docker 
+* PostGres 
+* SNYK 
+* GitHub 
+* Node 
+## Systems Access 
+Access to the following platforms will also be required for development: 
+* Cloud.gov 
+* SAM.gov 
+* MAX.gov 
+* Docker.com and hub.docker.com 
+* SNYK.io
+* GitHub - GSA team 
+## Environment Variables 
+There are a few environment variables that control the configuration or set security sensitive keys. On cloud.gov any variables you would like to configure manually can be changed using the cloud.gov control panel or CLI.
+* **NODE_ENV** - This should be set based on the environment. It is used to switch between the available environments. Examples include production, cloudstage, clouddev, circle, development.
+The definitive list can be found by reading config.js.
+* **VCAP_SERVICES** - cloud.gov will automatically set this environment variable. It contains connection information for the specific postgres database for that environment - and also any other cloud.gov services or connections that may be configured in the future. 
+# Setup and Deployment  
+## Getting Started
+* To get started with SRT-API, go to [GSA/srt-api](https://github.com/GSA/srt-api) to copy the URL for cloning the project. 
+* Open Terminal or use Visual Studio Code and open a terminal window. 
+* Navigate to the desired folder and clone the project. 
+## Installation 
+* Navigate to the bin folder that was created through the clone. 
+* Type `./dev_setup.sh` to begin installation. 
+* Note - If this script fails during execution, please refer to the manual setup guide for installing the necessary tools and packages here: [srt-api - documentation](https://github.com/GSA/srt-api/tree/main/documentation).  
+* This script will install and set up much of what you need for this project: 
+    * Node Package Manager (npm) 
+    * Postgres 
+    * Node Version Manager (nvm) 
+    * SNYK - log into SNYK using your GitHub account when prompted by the script 
+* This script will also create the needed local Postgres database with all of the tables required by this project, if they do not already exist. 
+* It will also install Node Version 16, which is the requirement for this project. 
+* This script will then install and update all of the required Node modules. 
+## Running and Configuration  
+The `npm run start` command will start the server. Database configuration options are read from server/dbConfig/dbConfig.js and general configuration from server/config/config.js file. dbConfig.json holds the configuration for every environment the app my be run in and the specific configuration for this run is chosen based on the NODE_ENV environment variable.
 
-## Install Postgres 
-Mac: 
-```
-brew install postgresql
-```
-
-Ubuntu: 
-```
-sudo apt install postgresql-client libpq-dev postgresql-server-dev pgadmin
-```
-
-## Install Node Version Manager (nvm)
-Mac: 
-```
-brew install nvm
-
-mkdir ~/.nvm 
-
-echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bash_profile
-echo '[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"' >> ~/.bash_profile
-echo '[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && \. "/usr/local/opt/nvm/etc/bash_completion"' >> ~/.bash_profile
-
-source ~/.bash_profile 
-```
-Ubuntu: 
-```
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
-
-source ~/.bashrc 
-```
-## Download SRT Source Code 
-For both Mac and Ubuntu: 
-* Navigate to the desired folder to clone the srt-api project. 
-* Then execute the following in the command line: 
-```
-git clone https://github.com/GSA/srt-api.git
-cd srt-api
-git checkout dev
-npm install
-```
-* Next navigate to the desired folder to clone the srt-ui project. 
-* Then execute the following in the command line: 
-```
-git clone https://github.com/GSA/srt-ui.git
-cd srt-ui
-git checkout dev
-npm install
-```
-## Set Environment Variables 
-* Set the following environment variables: 
-```
-echo export NODE_ENV=development >> ~/.bashrc
-echo export PGHOST=localhost >> ~/.bashrc
-echo export PGDATABASE=srt >> ~/.bashrc
-echo export PGUSER=circleci >> ~/.bashrc
-echo export PGPASSWORD=srtpass >> ~/.bashrc
-source ~/.bashrc
-```
-
-## Start Postgres 
-Mac: 
-```
-pg_ctl start
-```
-Ubuntu: 
-```
-sudo systemctl start postgresql.service
-```
-## Final Steps 
-For both Mac and Ubuntu: 
-### Create Postgres user 
-```
-sudo -u postgres createuser circleci
-sudo -u postgres psql -c "ALTER USER circleci WITH password 'srtpass';"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO circleci;"
-sudo -u postgres psql -c "ALTER USER circleci WITH Superuser;"
-sudo -u postgres psql -c "ALTER USER circleci WITH CREATEROLE;"
-sudo -u postgres psql -c "ALTER USER circleci WITH CREATEDB;"
-
-sudo -u postgres createuser $USER
-sudo -u postgres psql -c "ALTER USER $USER WITH Superuser;"
-sudo -u postgres psql -c "ALTER USER $USER WITH CREATEDB;"
-```
-### Create the SRT database 
-```
-echo "Creating the srt database..."
-sudo -u postgres createdb srt -O circleci
-```
-### Create tables 
-```
-echo "Creating the srt tables..."
-psql -d srt -f ../db/init/tables.sql
-```
-### Install Node Version 16 
-```
-echo "Installing node 16..."
-nvm install 16
-
-echo "Set the environment to use version 16..."
-nvm use 16
-```
-### Install SNYK 
-```
-echo "Installing snyk..."
-npm install snyk -g
-
-echo "Authenticating snyk..."
-snyk auth
-```
-### Install Node modules 
-* Navigate back to the top level of your srt-api folder 
-```
-echo "Installing node modules..."
-npm install
-```
-### Start the Server 
-```
-echo "Starting the server..."
-npm run dev
-```
+Database connection information is stored in the dbConfig.js file but will be overridden by any settings in the VCAP_SERVICES environment variable. This feature allows cloud.gov to inject the proper database connection information upon startup.
+## Deployment 
+[Need text that describes the current deployment process here]
+# More Info  
+For more detailed information, please refer to the documentation here: [Documentation](https://github.com/GSA/srt-api/tree/main/documentation) 
