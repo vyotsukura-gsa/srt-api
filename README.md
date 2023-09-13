@@ -2,7 +2,7 @@
 Use the following guide to install required modules when the automated setup script fails or is not available. 
 
 ## Install Docker 
-* Install the Docker engine for various platforms by referring to the documentation here: [https://docs.docker.com/engine/install/]
+Install the Docker engine for various platforms by referring to the documentation here: [https://docs.docker.com/engine/install/]
 
 ## Install Node Package Manager (npm)
 Mac: 
