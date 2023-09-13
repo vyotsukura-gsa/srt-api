@@ -119,6 +119,8 @@ echo "Set the environment to use version 16..."
 nvm use 16
 ```
 ### Install SNYK 
+* During this installation you will be redirected to the SNYK website. 
+* Complete your authentication at SNYK before proceeding to the next step. 
 ```
 echo "Installing snyk..."
 npm install snyk -g
