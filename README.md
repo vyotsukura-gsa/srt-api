@@ -11,8 +11,10 @@ brew install npm
 ```
 
 Ubuntu: 
-`sudo apt-get install -y nodejs npm
-sudo npm install npm@latest -g`
+```
+sudo apt-get install -y nodejs npm
+sudo npm install npm@latest -g
+```
 
 ## Install Postgres 
 Mac: 
