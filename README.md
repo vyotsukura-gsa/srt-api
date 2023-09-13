@@ -2,7 +2,7 @@
 Use the following guide to install required modules when the automated setup script fails or is not available. 
 
 ## Install Docker 
-Install the Docker engine for various platforms by referring to the documentation here: [https://docs.docker.com/engine/install/]
+* Install the Docker engine for various platforms by referring to the documentation here: [https://docs.docker.com/engine/install/]
 
 ## Install Node Package Manager (npm)
 Mac: 
@@ -65,7 +65,7 @@ git checkout dev
 npm install
 ```
 ## Set Environment Variables 
-Set the following environment variables: 
+* Set the following environment variables: 
 ```
 echo export NODE_ENV=development >> ~/.bashrc
 echo export PGHOST=localhost >> ~/.bashrc
@@ -101,15 +101,20 @@ sudo -u postgres psql -c "ALTER USER $USER WITH CREATEDB;"
 ```
 ### Create the SRT database 
 ```
+echo "Creating the srt database..."
 sudo -u postgres createdb srt -O circleci
 ```
 ### Create tables 
 ```
+echo "Creating the srt tables..."
 psql -d srt -f ../db/init/tables.sql
 ```
 ### Install Node Version 16 
 ```
+echo "Installing node 16..."
 nvm install 16
+
+echo "Set the environment to use version 16..."
 nvm use 16
 ```
 ### Install SNYK 
@@ -121,12 +126,13 @@ echo "Authenticating snyk..."
 snyk auth
 ```
 ### Install Node modules 
+* Navigate back to the top level of your srt-api folder 
 ```
 echo "Installing node modules..."
-cd ..
 npm install
 ```
 ### Start the Server 
 ```
+echo "Starting the server..."
 npm run dev
 ```
